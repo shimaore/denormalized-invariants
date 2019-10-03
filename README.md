@@ -10,7 +10,7 @@ Specifically it is targeted at CouchDB.
 {invariant,DenormalizedDB} = require 'denormalized-invariants'
 
 class Business
-  Subscription: ({type}) -> type is 'subscription'
+  @Subscription: ({type}) -> type is 'subscription'
 
   constructor: (db_uri) ->
     @db = new DenormalizedDB db_uri
