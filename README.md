@@ -19,7 +19,7 @@ class Business
       S
       .filter Business.Subscription
       .map (doc) =>
-        url = "#{panel}#/s/#{doc.s}"
+        url = "#{panel}/s/#{doc.s}"
 
         return if doc.panel?.url is url
         doc.panel ?= {}
