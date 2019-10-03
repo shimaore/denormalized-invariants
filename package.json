@@ -1,6 +1,6 @@
 {
   "name": "denormalized-invariants",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Maintain invariants in a CouchDB environment",
   "directories": {
     "test": "test"
