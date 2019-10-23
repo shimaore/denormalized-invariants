@@ -18,7 +18,7 @@
   "author": "stephane@shimaore.net",
   "license": "ISC",
   "dependencies": {
-    "most-couchdb": "^3.7.3"
+    "most-couchdb": "^3.8.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
