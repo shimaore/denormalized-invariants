@@ -57,10 +57,8 @@
 Maintain invariants on all changes.
 
           keep ->
-            db.denormalized()
-            .map observer
-            .awaitPromises() # queue
-            .drain()
+            for await doc from db.denormalized()
+              try await observer doc
 
 Also maintain invariants on existing database content.
 
