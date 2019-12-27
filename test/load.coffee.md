@@ -11,7 +11,7 @@
         require '..'
 
     describe 'Invariants', ->
-      uri = "http://#{process.env.COUCHDB_USER ? 'admin'}:#{process.env.COUCHDB_PASSWORD ? 'password'}@localhost:5984/test"
+      uri = "http://#{process.env.COUCHDB_USER ? 'admin'}:#{process.env.COUCHDB_PASSWORD ? 'password'}@couchdb:5984/test"
       CouchDB = require '../denormalized'
 
       db = new CouchDB uri
