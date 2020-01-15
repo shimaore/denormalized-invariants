@@ -38,6 +38,22 @@
 
     {INVARIANTS_LOG} = process.env
 
+    NS_PER_MSEC = 1e6
+
+    class TimeoutError extends Error
+      constructor: ->
+        super 'Invariant took too long'
+
+    class Timer
+      constructor: (timeout)->
+        @timeout = timeout * NS_PER_MSEC
+        @start = process.hrtime.bigint()
+
+      cancel: ->
+        now = process.hrtime.bigint()
+        return false if (now - @start) < @timeout
+        throw new TimeoutError
+
     invariant.start = ->
 
       for [db,handlers] from invariants
@@ -49,7 +65,9 @@
               _s = Date.now()
             s = most.of(doc).multicast()
             for {comment,handler} in handlers
-              try await s.thru(handler).map( (p) -> heal comment, p, doc ).awaitPromises().drain()
+              timer = new Timer 20000
+              cancel = -> timer.cancel()
+              try await handler(s,cancel).map( (p) -> heal comment, p, doc ).awaitPromises().drain()
             await sleep 10 # give the other DBs a chance to run
             if INVARIANTS_LOG is 'yes'
               console.log "Handling #{doc._id} #{doc._rev} took #{Date.now()-_s}ms"

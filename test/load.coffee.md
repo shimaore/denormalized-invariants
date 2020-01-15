@@ -34,7 +34,7 @@
           constructor: (db_uri) ->
             @db = new DenormalizedDB db_uri
 
-            invariant 'A subscription document should have a panel link', @db, (S) =>
+            invariant 'A subscription document should have a panel link', @db, (S,cancel) =>
               S
               .filter Business.Subscription
               .map (doc) =>
