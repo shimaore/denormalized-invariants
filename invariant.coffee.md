@@ -19,12 +19,13 @@
       console.error "✔ Invariant `#{comment}` is ready"
       return
 
-    heal = (t,p) ->
+    heal = (t,p,doc) ->
       try
         await p
       catch error
         console.warn t, '→', error.message,
-          error.response?.error?.method, error.response?.error?.path # superagent's
+          error.response?.error?.method, error.response?.error?.path, # superagent's
+          doc?._id, doc?._rev
 
     running = true
 
@@ -48,7 +49,7 @@
               _s = Date.now()
             s = most.of(doc).multicast()
             for {comment,handler} in handlers
-              try await s.thru(handler).map( (p) -> heal comment, p ).awaitPromises().drain()
+              try await s.thru(handler).map( (p) -> heal comment, p, doc ).awaitPromises().drain()
             await sleep 10 # give the other DBs a chance to run
             if INVARIANTS_LOG is 'yes'
               console.log "Handling #{doc._id} #{doc._rev} took #{Date.now()-_s}ms"
