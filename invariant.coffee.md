@@ -59,10 +59,10 @@
       for [db,handlers] from invariants
         do (db,handlers) ->
 
-          observer = (doc) ->
+          observer = (doc,label) ->
             if INVARIANTS_LOG is 'yes'
-              console.log "Handling #{doc._id} #{doc._rev} (start)"
-              _s = Date.now()
+              console.log "Handling #{label} #{doc._id} #{doc._rev} (start)"
+              _s = process.hrtime.bigint()
             s = most.of(doc).multicast()
             for {comment,handler} in handlers
               timer = new Timer 20000
@@ -70,7 +70,8 @@
               try await handler(s,cancel).map( (p) -> heal comment, p, doc ).awaitPromises().drain()
             await sleep 10 # give the other DBs a chance to run
             if INVARIANTS_LOG is 'yes'
-              console.log "Handling #{doc._id} #{doc._rev} took #{Date.now()-_s}ms"
+              _s = process.hrtime.bigint() - _s
+              console.log "Handling #{label} #{doc._id} #{doc._rev} took #{_s/NS_PER_MSEC}ms"
             return
 
 Maintain invariants on all changes.
