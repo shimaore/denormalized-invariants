@@ -77,14 +77,20 @@ Maintain invariants on all changes.
 
           keep ->
             for await doc from db.denormalized()
-              try await observer doc
+              try
+                await observer doc, 'changes'
+              catch error
+                console.error error
             return
 
 Also maintain invariants on existing database content.
 
           keep ->
             for await doc from db.all_docs()
-              try await observer doc
+              try
+                await observer doc, 'alldocs'
+              catch error
+                console.error error
             return
 
       return
