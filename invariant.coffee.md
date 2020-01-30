@@ -38,7 +38,7 @@
 
     {INVARIANTS_LOG} = process.env
 
-    NS_PER_MSEC = 1e6
+    NS_PER_MSEC = `1_000_000n`
 
     class TimeoutError extends Error
       constructor: ->
@@ -46,7 +46,7 @@
 
     class Timer
       constructor: (timeout)->
-        @timeout = timeout * NS_PER_MSEC
+        @timeout = (BigInt timeout) * NS_PER_MSEC
         @start = process.hrtime.bigint()
 
       cancel: ->
